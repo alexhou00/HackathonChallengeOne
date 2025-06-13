@@ -1,36 +1,109 @@
+# challenge_1/model_train.py
+
+import os
 import pandas as pd
-import lightgbm as lgb
-from sklearn.metrics import accuracy_score, f1_score
-from sklearn.preprocessing import LabelEncoder
-from scipy.sparse import hstack
-from preprocess import preprocess
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+import joblib
+import numpy as np
 
-# Load data
-train = pd.read_csv('../data/challenge_1/train/classification_data.csv')
-val = pd.read_csv('../data/challenge_1/val/classification_data.csv')
+# === Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'challenge_1', 'train', 'classification_data.csv')
 
-# Target: Predict the responsible_entity_level (Kommune, Land, Bund)
-le = LabelEncoder()
-train['target'] = le.fit_transform(train['responsible_entity_level'])
-val['target'] = le.transform(val['responsible_entity_level'])
+# === Load data
+print(f"📄 Using dataset: {DATA_PATH}")
+df = pd.read_csv(DATA_PATH)
 
-# Feature preprocessing
-X_train_cat, X_train_text, tfidf = preprocess(train)
-X_val_cat, X_val_text, _ = preprocess(val, tfidf=tfidf, fit=False)
+TARGET_COL = 'responsible_entity_level'
+drop_cols = [
+    'issue_id', 'timestamp',
+    'responsible_entity_id', 'responsible_entity_name',
+    'responsible_entity_level',  # target
+    'description', 'municipality', 'district', 'state'  # ⚠️ removed due to leakage
+]
 
-# Combine sparse matrices
-X_train = hstack([X_train_cat, X_train_text])
-X_val = hstack([X_val_cat, X_val_text])
+#X = df.drop(columns=drop_cols, errors='ignore')
+X = df.drop(columns=drop_cols + ['category'], errors='ignore')
+y = df[TARGET_COL]
 
-# Train model
-model = lgb.LGBMClassifier(objective='multiclass', num_class=len(le.classes_), class_weight='balanced')
-model.fit(X_train, train['target'])
+# === Diagnostics
+print(f"✅ Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
+print(f"🎯 Target distribution:\n{y.value_counts()}")
+print(f"🧪 Features used for training: {list(X.columns)}")
+print("🔍 Sample row:")
+print(X.iloc[0])
 
-# Predict and evaluate
-preds = model.predict(X_val)
-print("Accuracy:", accuracy_score(val['target'], preds))
-print("F1 Score:", f1_score(val['target'], preds, average='macro'))
+# === Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
 
-# Optional: print predicted classes
-val['predicted_level'] = le.inverse_transform(preds)
-print(val[['issue_id', 'responsible_entity_level', 'predicted_level']].head())
+# === Import preprocessing
+from preprocessing import build_preprocessor
+preprocessor = build_preprocessor()
+
+# === Build pipeline
+model = LogisticRegression(max_iter=1000, random_state=42)
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('classifier', model)
+])
+
+# === Train model
+print("🚀 Training the model...")
+pipeline.fit(X_train, y_train)
+print("✅ Training complete!")
+
+# === Evaluate
+y_pred = pipeline.predict(X_test)
+print("\n📊 Evaluation on test set:")
+print(classification_report(y_test, y_pred))
+
+# === Sample predictions
+print("🔮 Sample predictions:")
+for i in range(min(5, len(y_test))):
+    print(f"  True: {y_test.iloc[i]} | Predicted: {y_pred[i]}")
+
+# === Training accuracy
+train_score = pipeline.score(X_train, y_train)
+print(f"🎯 Training accuracy: {train_score:.4f}")
+
+# === Leakage test
+print("\n🧪 Testing for data leakage with shuffled labels...")
+y_shuffled = np.random.permutation(y_train)
+pipeline.fit(X_train, y_shuffled)
+shuffled_score = pipeline.score(X_test, y_test)
+print(f"🎭 Accuracy with shuffled labels: {shuffled_score:.4f}")
+print("⚠️  If this is high (>0.5), you likely have leakage.")
+
+# === Save model
+MODEL_PATH = os.path.join(BASE_DIR, 'trained_model.joblib')
+joblib.dump(pipeline, MODEL_PATH)
+print(f"\n💾 Model saved to: {MODEL_PATH}")
+
+# === Feature importance diagnostics ===
+from sklearn.ensemble import RandomForestClassifier
+
+print("\n🌲 Training RandomForest to check feature importance...")
+rf_pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('classifier', RandomForestClassifier(random_state=42))
+])
+rf_pipeline.fit(X_train, y_train)
+
+# Get feature names after preprocessing
+feature_names = rf_pipeline.named_steps['preprocessor'].get_feature_names_out()
+importances = rf_pipeline.named_steps['classifier'].feature_importances_
+
+# Combine and sort
+import pandas as pd
+importance_df = pd.DataFrame({
+    'feature': feature_names,
+    'importance': importances
+}).sort_values(by='importance', ascending=False)
+
+print("\n🔥 Top 20 most important features:")
+print(importance_df.head(20).to_string(index=False))
