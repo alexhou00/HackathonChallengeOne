@@ -20,11 +20,13 @@ project/
 │       └── test/
 │           └── classification_data.csv
 ├── outputs/
-│   │ 
+│   ├── logs/
+│   ├── model/
 │   └── submission/
 │       ├── challenge1_submission.csv
 │       └── test_with_predictions.csv
 └── basic_model_explore.ipynb
+
 ```
 
 ## Features
@@ -78,6 +80,39 @@ The model is a suprervised machine learning piepline designed to classify German
   - Balanced class weights
   - Random state: 42
   - Parallel processing enabled
+
+1. basic_model_explore.ipynb
+- Selects the 5 most frequently mentioned classes of responsible entities
+- After computing the 5 most frequently mentioned class, the model goes through the list of
+data to decide which of the 5 most frequently mentioned class it belongs to 
+- The preprocessing pipeline also reduces the number of features in the data to 300 components 
+- loads test data and applies the pipeline to predict responsible entities 
+- saves submission CSV with predictions to outputs/submission
+
+
+2. intended method if time would permit (basic_model_explore_alex_17.ipynb)
+- create a log directory if it doesnt exist 
+- process data by splitting and filtering
+
+                                    🌳 Start: All Complaints
+                                        │
+                           ┌────────────┴────────────┐
+                           │                         │
+               🏛️ Contains Land keywords?       🏛️ Contains Bund keywords?
+                     (has_land_keywords)             (has_bund_keywords)
+                           │                         │
+               ┌───────────┴───────────┐   ┌─────────┴─────────┐
+               │                       │   │                   │
+       🚦 Verkehr-related?     🎓 Bildung-related?    🌳 Umwelt-related?     🏥 Gesundheit-related?
+    (has_verkehr_keywords)   (has_bildung_keywords) (has_umwelt_keywords) (has_gesundheit_keywords)
+               │                       │                   │                      │
+          [Route to Entity A]   [Route to Entity B]   [Entity C]            [Entity D]
+
+
+
+
+
+
 
 ## Installation
 
