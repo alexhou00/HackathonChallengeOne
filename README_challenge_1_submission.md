@@ -5,7 +5,7 @@
 ## Task
 Develop a system that automatically determines political responsibilities for citizen concerns. Given a list of problems with assigned categories (e.g., "Verkehr", "Bildung", "Migration"), develop a mapping mechanism that assigns these categories to appropriate political levels and actors – e.g., a member of the Bundestag, a state parliament, or a municipal office
 
-The classification system processes German text descriptions and additional keyword features to predict which government entity (`responsible_entity_id`) should handle specific issues. The model handles multiple classes including federal ministries (BUND) and various state-level departments (LAND) across different German states.
+The classification system processes German text descriptions and additional keyword features to predict which government entity (`responsible_entity_id`) should handle specific issues. The model handles multiple classes including federal ministries (BUND) and various state-level departments (LAND) across different German states. In the future the model could be expanded to KOMMUNEN as well.
 
 ## Project Structure
 
@@ -20,6 +20,7 @@ project/
 │       └── test/
 │           └── classification_data.csv
 ├── outputs/
+│   │ 
 │   └── submission/
 │       ├── challenge1_submission.csv
 │       └── test_with_predictions.csv
@@ -113,7 +114,13 @@ jupyter notebook basic_model_explore.ipynb
 - **Challenge**: High class imbalance with 90+ different government entities
 - **Best Performing Classes**: 
   - Federal Ministry for Digital and Transport: 51% precision, 100% recall
-  - Some state-level departments show limited success
+  - Some state-level departments show limited success  
+
+
+  **The training data is not sufficient to increase the accuracy of descriptions with less frequency**  
+  
+- **Validation Accuracy with most frequent asked issues of bias N5**: ~84.4%
+- however the other classes will be ignored
 
 ## Output Files
 
