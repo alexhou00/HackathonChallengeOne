@@ -30,7 +30,8 @@ project/
 ## Features
 
 ### Text Features
-- **Primary Feature**: `description` - German text descriptions of issues
+- **Primary Feature**: `description` - German text descriptions of issues, state - where the complaint is filed from,
+category - under which category this complaint fell under
 - **Preprocessing**: TF-IDF vectorization with German stopwords removal
 - **Dimensionality Reduction**: TruncatedSVD to 300 components
 
