@@ -4,3 +4,10 @@ scikit-learn
 lightgbm
 matplotlib
 seaborn
+joblib
+python-dateutil
+pytz
+scipy
+six
+threadpoolctl
+tzdata
