@@ -9,8 +9,8 @@ train = pd.read_csv('../data/challenge_1/train/classification_data.csv')
 val = pd.read_csv('../data/challenge_1/val/classification_data.csv')
 
 le = LabelEncoder()
-train['target'] = le.fit_transform(train['responsible_entity_id'])
-val['target'] = le.transform(val['responsible_entity_id'])
+train['responsible_entity_int'] = le.fit_transform(train['responsible_entity_id'])
+val['responsible_entity_int'] = le.transform(val['responsible_entity_id'])
 
 X_train_cat, X_train_text, tfidf = preprocess(train)
 X_val_cat, X_val_text, _ = preprocess(val, tfidf=tfidf, fit=False)
