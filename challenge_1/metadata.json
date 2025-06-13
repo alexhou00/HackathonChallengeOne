@@ -1,0 +1,47 @@
+{
+  "task": "Entity Classification (Challenge 1)",
+  "created": "2025-06-13T03:43:32.450131",
+  "target_variable": "responsible_entity_id",
+  "test_submission_format": {
+    "description": "CSV file with two columns: issue_id and responsible_entity_id",
+    "example": [
+      {
+        "issue_id": "ISS_20240612_0001",
+        "responsible_entity_id": "LAND_BE_VM"
+      },
+      {
+        "issue_id": "ISS_20240612_0002",
+        "responsible_entity_id": "BUND_BMDV"
+      }
+    ]
+  },
+  "splits": {
+    "train": {
+      "n_samples": 695,
+      "n_entities": 129,
+      "n_categories": 8
+    },
+    "val": {
+      "n_samples": 149,
+      "n_entities": 78,
+      "n_categories": 8
+    },
+    "test": {
+      "n_samples": 149,
+      "n_categories": 8,
+      "note": "Test data does NOT contain responsible_entity_id - you must predict it!"
+    }
+  },
+  "total_entities": 129,
+  "categories": [
+    "Verkehr",
+    "Bildung",
+    "Migration",
+    "Umwelt",
+    "Gesundheit",
+    "Wirtschaft",
+    "Digitalisierung",
+    "Sicherheit"
+  ],
+  "evaluation_metric": "accuracy"
+}
