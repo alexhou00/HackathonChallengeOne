@@ -97,7 +97,7 @@ nltk.download("stopwords")
 ### Training and Evaluation
 ```python
 # Load the notebook and run all cells
-jupyter notebook basic_model_explore.ipynb
+#notebook basic_model_explore.ipynb
 ```
 
 ### Key Steps:
@@ -120,7 +120,7 @@ jupyter notebook basic_model_explore.ipynb
   **The training data is not sufficient to increase the accuracy of descriptions with less frequency**  
   
 - **Validation Accuracy with most frequent asked issues of bias N5**: ~84.4%
-- however the other classes will be ignored
+- However, the other classes will be ignored
 
 ## Output Files
 
