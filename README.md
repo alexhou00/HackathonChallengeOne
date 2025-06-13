@@ -10,22 +10,33 @@ The classification system processes German text descriptions and additional keyw
 ## Project Structure
 
 ```
-project/
+HackathonChallengeOne/
+├── challenge_1/
+│   ├── basic_model_explore.ipynb
+│   ├── basic_model_explore_alex_17.ipynb
 ├── data/
-│   └── challenge_1/
-│       ├── train/
-│       │   └── classification_data.csv
-│       ├── val/
-│       │   └── classification_data.csv
-│       └── test/
-│           └── classification_data.csv
+│   ├── challenge_1/
+│   │   ├── test/
+│   │   │   └── classification_data.csv
+│   │   ├── train/
+│   │   │   └── classification_data.csv
+│   │   ├── val/
+│   │   │   └── classification_data.csv
+│   │   └── metadata.json
+│   └── shared/
 ├── outputs/
 │   ├── logs/
-│   ├── model/
+│   │   ├── challenge1_YYYY-MM-DD_HH-MM-SS-xxx-alex_17.log
+│   │   └── challenge1_YYYY-MM-DD_HH-MM-SS-xxx.log
+│   ├── models/
+│   │   ├── challenge1_model.pkl
+│   │   └── challenge1_model-alex_17.pkl
 │   └── submission/
-│       ├── challenge1_submission.csv
-│       └── test_with_predictions.csv
-└── basic_model_explore.ipynb
+│       ├── challenge1_submission-YYYY-MM-DD_HH-MM-SS-xxx-alex_17.csv
+│       ├── challenge1_submission-YYYY-MM-DD_HH-MM-SS-xxx.csv
+│       ├── test_with_predictions-YYYY-MM-DD_HH-MM-SS-xxx-alex_17.csv
+│       └── test_with_predictions-YYYY-MM-DD_HH-MM-SS-xxx.csv
+
 
 ```
 
