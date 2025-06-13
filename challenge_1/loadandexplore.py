@@ -14,7 +14,7 @@ with open('../data/shared/categories.json', encoding='utf-8') as f:
 
 # Explore columns
 print(train_df.columns)
-train_df.head()
+print(train_df.head())
 
 print(train_df['responsible_entity_id'].value_counts().head(10))
 print(train_df.groupby('category')['responsible_entity_id'].nunique())
