@@ -6,10 +6,10 @@ train_df = pd.read_csv('../data/challenge_1/train/classification_data.csv')
 val_df = pd.read_csv('../data/challenge_1/val/classification_data.csv')
 
 # Load metadata
-with open('../data/shared/entity_catalog.json') as f:
+with open('../data/shared/entity_catalog.json', encoding='utf-8') as f:
     entity_catalog = json.load(f)
 
-with open('../data/shared/categories.json') as f:
+with open('../data/shared/categories.json', encoding='utf-8') as f:
     categories_info = json.load(f)
 
 # Explore columns
