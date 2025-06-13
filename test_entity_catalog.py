@@ -1,6 +1,6 @@
 import json
 
-with open('../data/shared/entity_catalog.json', 'r') as f:
+with open('../data/shared/entity_catalog.json', 'r', encoding='utf-8') as f:
     catalog = json.load(f)
 
 # Explore structure
@@ -12,7 +12,7 @@ verkehr_entities = catalog['category_entity_map']['Verkehr']
 print(f"Entities handling Verkehr issues: {verkehr_entities}")
 
 # Get entity details
-entity = catalog['entities']['BUND_BMDV']
+entity = catalog['entities']['BUND_BUNDESMINISTERIUM_DES_INNERN_UND_FÜR_HEIMAT']
 print(f"Name: {entity['name']}")
 print(f"Level: {entity['level']}")
 print(f"Competencies: {entity['competencies']}")
