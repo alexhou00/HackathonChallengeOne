@@ -40,6 +40,20 @@ project/
 - `has_gesundheit_keywords` - Health keywords indicator
 
 ## Model Architecture
+The model is a suprervised machine learning piepline designed to classify German-language complaint descriptions into over 100 categories. 
+1. **Input**: Raw German text (e.g., customers complaint). 
+2. **Preprocessing**: 
+   - Lowercasing 
+   - Removal of German stopwords (using NLTK)
+   - Bigrams are included
+   - Limits feature size to 10,000 most informative terms. 
+3. **ColumnTransformer**:
+   - Combines the transformed text with other features (e.g., keyword-based features).
+4. **Classifier**:
+   - A Decision Tree or Logistic Regression model (depending on what’s used in `clf`).
+   - Trained to predict the correct complaint category from over 100 classes.
+
+
 
 ### Preprocessing Pipeline
 1. **Text Processing**:
